@@ -1,28 +1,91 @@
 # Supermail
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/supermail`. To experiment with that code, run `bin/console` for an interactive prompt.
+Supermail is a slightly more intuitive way of organizing Emails in a Rails application.
 
 ## Installation
-
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
 
 Install the gem and add to the application's Gemfile by executing:
 
 ```bash
-bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+bundle add supermail
 ```
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+Then install it in Rails.
 
 ```bash
-gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+rails generate supermail:install
+```
+
+This creates the `app/emails/application_email.rb` file that you can customize as the base for all emails.
+
+```ruby
+class ApplicationEmail < Supermail::Email
+  def from = "Supermail <noreply@supermail.com>"
+
+  class HTML
+    def after_template
+      p { "Best, The Supermail Team" }
+    end
+  end
+
+  class Text
+    def after_template = <<~_
+      Best,
+      The Supermail Team"
+    _
+  end
+end
 ```
 
 ## Usage
 
-TODO: Write usage instructions here
+To generate a new email, run the following command:
+
+```bash
+rails generate supermail:email User::Welcome
+```
+
+This will create a new email class in `app/mailers/user/welcome.rb`.
+
+```ruby
+# ./app/email/user/welcome.rb
+class User::Welcome < ApplicationEmail
+  def initialize(user:)
+    @user = user
+  end
+
+  def subject = "Welcome to Supermail!"
+
+  class HTML
+    def view_template
+      h1 { "Welcome, #{@user.name}!" }
+      p { "We're excited to have you on board." }
+    end
+  end
+
+  class Text
+    def view_template = <<~_
+      Welcome, #{@user.name}!
+
+      We're excited to have you on board.
+    _
+  end
+end
+```
+
+Then, to send the email.
+
+```ruby
+User::Welcome.new(user: User.first).deliver_now
+```
+
+If you want to tweak the message on the fly, you can modify the message, then deliver it.
+
+```ruby
+User::Welcome.new(user: User.first).message.tap do
+  it.to << "another@example.com"
+end.deliver_now
+```
 
 ## Development
 
@@ -32,4 +95,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/supermail.
+Bug reports and pull requests are welcome on GitHub at https://github.com/rubymonolith/supermail.
