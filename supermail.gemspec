@@ -33,5 +33,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   # Uncomment to register a new dependency of your gem
-  spec.add_dependency "actionmailer", ">= 7.0"
+  spec.add_dependency "actionmailer", "~> 7.0"
+  spec.add_dependency "railties", "~> 7.0"
+  spec.add_dependency "activesupport", "~> 7.0"
+  
+  spec.add_development_dependency "rails", "~> 7.0"
 end

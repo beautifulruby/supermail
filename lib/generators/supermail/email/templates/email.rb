@@ -1,0 +1,7 @@
+# frozen_string_literal: true
+
+class <%= class_name %>Email < ApplicationEmail
+  def body = <<~PLAIN
+
+  PLAIN
+end

@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-class ExampleMailer < Supermail::Rails::Base
+class ExampleMailer < Supermail::Base
   def initialize(to:, from:, subject:, body:)
     @to = to
     @from = from

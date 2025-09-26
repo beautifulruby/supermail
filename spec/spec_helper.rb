@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'rails/all'
+require 'rails/generators/test_case'
+require 'minitest/assertions'
 require "supermail"
 
 RSpec.configure do |config|
@@ -12,4 +15,16 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+end
+
+require "rails/generators/testing/behavior"
+require "rails/generators/testing/setup_and_teardown"
+require "rails/generators/testing/assertions"
+
+RSpec.configure do |config|
+  config.include Rails::Generators::Testing::Behavior,         type: :generator
+  config.include Rails::Generators::Testing::SetupAndTeardown, type: :generator
+  config.include Rails::Generators::Testing::Assertions,       type: :generator
+  config.include Minitest::Assertions,                         type: :generator
+  config.include FileUtils,                                    type: :generator
 end
