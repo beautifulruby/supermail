@@ -1,30 +1,27 @@
 # frozen_string_literal: true
 
 require_relative "supermail/version"
-require 'action_mailer'
+require "action_mailer"
 
 module Supermail
   class Error < StandardError; end
 
-  class Base
-    delegate :deliver, :deliver_now, :deliver_later, to: :message_delivery
+  module Rails
+    class Base
+      delegate :deliver, :deliver_now, :deliver_later, to: :message_delivery
 
-    def to = nil
-    def from = nil
-    def subject = nil
-    def body = ""
+      def to = nil
+      def from = nil
+      def subject = nil
+      def body = ""
 
-    def message
-      message_delivery.message
-    end
+      def message
+        message_delivery.message
+      end
 
-    def message_delivery
-      ActionMailer::Base.mail(to:, from:, subject:, body:)
+      def message_delivery
+        ActionMailer::Base.mail(to:, from:, subject:, body:)
+      end
     end
   end
-end
-
-# Load generators only when Rails is available
-if defined?(::Rails)
-  require 'rails'
 end

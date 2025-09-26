@@ -1,4 +1,4 @@
-class ApplicationEmail < Supermail::Base
+class ApplicationEmail < Supermail::Rails::Base
   def from = "website@example.com"
 
   def body

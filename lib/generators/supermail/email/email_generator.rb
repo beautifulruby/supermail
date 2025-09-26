@@ -3,7 +3,7 @@
 require 'rails/generators/named_base'
 
 module Supermail
-  class EmailGenerator < Rails::Generators::NamedBase
+  class EmailGenerator < ::Rails::Generators::NamedBase
     source_root File.expand_path('templates', __dir__)
 
     desc "Generate a new email class"

@@ -3,7 +3,7 @@
 require 'rails/generators/base'
 
 module Supermail
-  class InstallGenerator < Rails::Generators::Base
+  class InstallGenerator < ::Rails::Generators::Base
       source_root File.expand_path('templates', __dir__)
 
       desc "Install Supermail in a Rails application"

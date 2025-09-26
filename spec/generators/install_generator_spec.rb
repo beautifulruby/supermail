@@ -5,10 +5,10 @@ require "generators/supermail/install/install_generator"
 
 RSpec.describe Supermail::InstallGenerator, type: :generator do
   tests Supermail::InstallGenerator
-  
+
   INSTALL_DESTINATION_PATH = Pathname.new(__dir__).join("../tmp/generators")
   destination INSTALL_DESTINATION_PATH.to_s
-  
+
   before { prepare_destination }
   after { FileUtils.rm_rf(INSTALL_DESTINATION_PATH) }
 
@@ -17,7 +17,7 @@ RSpec.describe Supermail::InstallGenerator, type: :generator do
 
     describe "app/emails/application_email.rb" do
       subject { File.read(INSTALL_DESTINATION_PATH.join("app/emails/application_email.rb")) }
-      it { is_expected.to match(/class ApplicationEmail < Supermail::Base/) }
+      it { is_expected.to match(/class ApplicationEmail < Supermail::Rails::Base/) }
       it { is_expected.to match(/def from = "website@example.com"/) }
       it { is_expected.to match(/The Example.com Team/) }
     end
