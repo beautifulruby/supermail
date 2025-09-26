@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "Build emails with plain ol' Ruby objects."
   spec.description = spec.summary
-  spec.homepage = "https://github.com/rubymonolith/supermail"
+  spec.homepage = "https://github.com/beautifulruby/supermail"
   spec.required_ruby_version = ">= 3.1.0"
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
@@ -33,9 +33,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   # Uncomment to register a new dependency of your gem
-  spec.add_dependency "actionmailer", "~> 7.0"
-  spec.add_dependency "railties", "~> 7.0"
-  spec.add_dependency "activesupport", "~> 7.0"
-  
-  spec.add_development_dependency "rails", "~> 7.0"
+  rails_version = ">= 7.0"
+  spec.add_dependency "actionmailer", rails_version
+  spec.add_development_dependency "rails", rails_version
 end

@@ -2,9 +2,7 @@ PATH
   remote: .
   specs:
     supermail (0.1.0)
-      actionmailer (~> 7.0)
-      activesupport (~> 7.0)
-      railties (~> 7.0)
+      actionmailer (>= 7.0)
 
 GEM
   remote: https://rubygems.org/
@@ -211,7 +209,7 @@ PLATFORMS
 
 DEPENDENCIES
   irb
-  rails (~> 7.0)
+  rails (>= 7.0)
   rake (~> 13.0)
   rspec (~> 3.0)
   supermail!
