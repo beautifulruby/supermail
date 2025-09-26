@@ -25,6 +25,13 @@ end
 
 Contrast that with rails ActionMailer, where you will spend 20 minutes trying to figure out how to send an email. I created this gem because I got tired of digging through Rails docs to understand how to intialize an email and send it. PORO's FTW!
 
+## Support this project
+
+Learn how to build UI's out of Ruby classes and support this project by ordering the [Phlex on Rails video course](https://beautifulruby.com/phlex).
+
+[![](https://immutable.terminalwire.com/hmM9jvv7yF89frBUfjikUfRmdUsTVZ8YvXc7OnnYoERXfLJLzDcj5dFM7qdfMG2bqQLuw633Zt1gl3O7z0zKmH6k8QmifN7z0kJo.png)](https://beautifulruby.com/phlex/forms/introduction)
+
+
 ## Installation
 
 Install the gem and add to the application's Gemfile by executing:
