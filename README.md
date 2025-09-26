@@ -16,23 +16,21 @@ Then install it in Rails.
 rails generate supermail:install
 ```
 
-This creates the `app/emails/application_email.rb` file that you can customize as the base for all emails.
+This creates the `ApplicationEmail` class at `app/emails/application_email.rb` where you can customize the base for all emails, including setting defaults like the `from` address.
 
 ```ruby
-class ApplicationEmail < Supermail::Email
-  def from = "Supermail <noreply@supermail.com>"
+class ApplicationEmail < Supermail::Rails::Base
+  def from = "website@example.com"
+  def to = nil
+  def subject = nil
+  def body
+     <<~_
+     #{yield if block_given?}
 
-  class HTML
-    def after_template
-      p { "Best, The Supermail Team" }
-    end
-  end
+     Best,
 
-  class Text
-    def after_template = <<~_
-      Best,
-      The Supermail Team"
-    _
+     The Example.com Team
+     _
   end
 end
 ```
@@ -45,30 +43,35 @@ To generate a new email, run the following command:
 rails generate supermail:email User::Welcome
 ```
 
-This will create a new email class in `app/mailers/user/welcome.rb`.
+This will create a new email class in `app/mailers/user/welcome_email.rb`.
 
 ```ruby
 # ./app/email/user/welcome.rb
-class User::Welcome < ApplicationEmail
-  def initialize(user:)
-    @user = user
+class User::WelcomeEmail < ApplicationEmail
+  def body = <<~PLAIN
+    Hello there!
+  PLAIN
+end
+```
+
+
+```ruby
+# ./app/email/user/welcome.rb
+class User::WelcomeEmail < ApplicationEmail
+  def initialize(person:)
+    @person = person
   end
 
-  def subject = "Welcome to Supermail!"
+  def to = @person.email
+  def subject = "Welcome to the website"
+  def body
+    super do
+      <<~_
+      Hi #{@person.name},
 
-  class HTML
-    def view_template
-      h1 { "Welcome, #{@user.name}!" }
-      p { "We're excited to have you on board." }
+      Welcome to the website We're excited to have you on board.
+      _
     end
-  end
-
-  class Text
-    def view_template = <<~_
-      Welcome, #{@user.name}!
-
-      We're excited to have you on board.
-    _
   end
 end
 ```
