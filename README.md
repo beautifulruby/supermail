@@ -1,6 +1,29 @@
 # Supermail
 
-Supermail is a slightly more intuitive way of organizing Emails in a Rails application.
+Organize emails with plain 'ol Ruby objects in a Rails application, like this:
+
+```ruby
+# ./app/email/user/welcome.rb
+class User::WelcomeEmail < ApplicationEmail
+  def initialize(person:)
+    @person = person
+  end
+
+  def to = @person.email
+  def subject = "Welcome to Beautiful Ruby"
+  def body
+    super do
+      <<~_
+      Hi #{@person.name},
+
+      You're going to learn a ton at https://beautifulruby.com.
+      _
+    end
+  end
+end
+```
+
+Contrast that with rails ActionMailer, where you will spend 20 minutes trying to figure out how to send an email. I created this gem because I got tired of digging through Rails docs to understand how to intialize an email and send it. PORO's FTW!
 
 ## Installation
 
