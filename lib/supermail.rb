@@ -8,18 +8,19 @@ module Supermail
 
   module Rails
     class Base
-      delegate :deliver, :deliver_now, :deliver_later, to: :message_delivery
+      delegate \
+          :deliver,
+          :deliver_now,
+          :deliver_later,
+          :message,
+        to: :action_mailer_base_mail
 
       def to = nil
       def from = nil
       def subject = nil
       def body = ""
 
-      def message
-        message_delivery.message
-      end
-
-      def message_delivery
+      private def action_mailer_base_mail
         ActionMailer::Base.mail(to:, from:, subject:, body:)
       end
     end
