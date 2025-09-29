@@ -42,4 +42,42 @@ RSpec.describe ExampleMailer do
   it "sets the body" do
     expect(subject.body.to_s).to eq("Hi there")
   end
+
+  describe "#mailto" do
+    let(:full_mailer_class) do
+      Class.new(Supermail::Rails::Base) do
+        def initialize(to:, from:, subject:, body:, cc:, bcc:)
+          @to = to
+          @from = from
+          @subject = subject
+          @body = body
+          @cc = cc
+          @bcc = bcc
+        end
+
+        attr_reader :to, :from, :subject, :body, :cc, :bcc
+      end
+    end
+
+    let(:full_mailer) do
+      full_mailer_class.new(
+        to: "recipient@example.com",
+        from: "sender@example.com",
+        subject: "Test Subject",
+        body: "Test body content",
+        cc: ["cc@example.com"],
+        bcc: ["bcc@example.com"]
+      )
+    end
+
+    it "passes all mail fields to the mailto URL" do
+      result = full_mailer.mailto
+      expect(result).to start_with("mailto:recipient@example.com?")
+      expect(result).to include("from=sender%40example.com")
+      expect(result).to include("subject=Test%20Subject")
+      expect(result).to include("body=Test%20body%20content")
+      expect(result).to include("cc=%5B%22cc%40example.com%22%5D")
+      expect(result).to include("bcc=%5B%22bcc%40example.com%22%5D")
+    end
+  end
 end
