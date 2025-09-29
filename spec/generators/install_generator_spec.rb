@@ -6,7 +6,7 @@ require "generators/supermail/install/install_generator"
 RSpec.describe Supermail::InstallGenerator, type: :generator do
   tests Supermail::InstallGenerator
 
-  INSTALL_DESTINATION_PATH = Pathname.new(__dir__).join("../tmp/generators")
+  INSTALL_DESTINATION_PATH = Pathname.new(__dir__).join("../../tmp/generators")
   destination INSTALL_DESTINATION_PATH.to_s
 
   before { prepare_destination }
