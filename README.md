@@ -83,7 +83,7 @@ class User::WelcomeEmail < ApplicationEmail
   PLAIN
 end
 ```
-
+You can customize the email by overriding the `to`, `from`, `subject`, and `body` methods.s
 
 ```ruby
 # ./app/email/user/welcome.rb
@@ -124,7 +124,7 @@ end.deliver_now
 
 ### Launch the user's email client
 
-Supermail clases can be used to generate `mailto:` links.
+Supermail clases can be used to generate `mailto:` links with Rails helpers.
 
 ```erb
 <%= link_to Support::OrderEmail.new(
