@@ -106,6 +106,8 @@ class User::WelcomeEmail < ApplicationEmail
 end
 ```
 
+### Send emails from the server
+
 Then, to send the email.
 
 ```ruby
@@ -118,6 +120,41 @@ If you want to tweak the message on the fly, you can modify the message, then de
 User::Welcome.new(user: User.first).message.tap do
   it.to << "another@example.com"
 end.deliver_now
+```
+
+### Launch the user's email client
+
+Supermail clases can be used to generate `mailto:` links.
+
+```erb
+<%= link_to Support::OrderEmail.new(
+      user: current_user,
+      order: @order
+    ).mail_to s%>
+```
+
+This opens your users email client with prefilled information. A support email about an order might look like this:
+
+```ruby
+class Support::OrderEmail < ApplicationEmail
+  def initialize(user:, order:)
+    @user = user
+    @order = order
+  end
+
+  def to = "support@example.com"
+  def from = @user.email
+  def subject = "Question about order #{@order.id}"
+  def body = <<~BODY
+    Hi Support,
+
+    I need help with my order #{@order.id}.
+
+    Thanks,
+
+    #{@user.name}
+  BODY
+end
 ```
 
 ## Development
