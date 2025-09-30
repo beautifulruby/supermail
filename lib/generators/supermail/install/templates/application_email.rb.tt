@@ -10,4 +10,12 @@ class ApplicationEmail < Supermail::Rails::Base
      The Example.com Team
      _
   end
+
+  def html_body
+    <<~HTML
+      #{yield if block_given?}
+      <p>Best,</p>
+      <p>The Example.com Team</p>
+    HTML
+  end
 end

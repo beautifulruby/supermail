@@ -13,8 +13,11 @@ module Supermail
           :deliver,
           :deliver_now,
           :deliver_later,
-          :message,
-        to: :action_mailer_base_mail
+        to: :message
+
+      def message
+        @message ||= action_mailer_base_mail
+      end
 
       def to = nil
       def from = nil
@@ -22,13 +25,45 @@ module Supermail
       def cc = []
       def bcc = []
       def body = ""
+      def html_body = nil
 
       # Generate a mailto: URL with appropriate escaping.
       def mailto = MailTo.href(to:, from:, cc:, bcc:, subject:, body:)
       alias :mail_to :mailto
 
       private def action_mailer_base_mail
-        ActionMailer::Base.mail(to:, from:, cc:, bcc:, subject:, body:)
+        if html_body && !html_body.empty?
+          # Multipart email with both text and HTML
+          # Capture values to avoid context issues in blocks
+          email_to = to
+          email_from = from
+          email_cc = cc
+          email_bcc = bcc
+          email_subject = subject
+          text_body = body
+          html_content = html_body
+
+          Mail.new do
+            to email_to
+            from email_from
+            cc email_cc if email_cc && !email_cc.empty?
+            bcc email_bcc if email_bcc && !email_bcc.empty?
+            subject email_subject
+
+            text_part do
+              body text_body
+            end
+
+            html_part do
+              content_type 'text/html; charset=UTF-8'
+              body html_content
+            end
+          end
+        else
+          # Plain text only
+          # ActionMailer::Base.mail returns a MessageDelivery, extract the message
+          ActionMailer::Base.mail(to:, from:, cc:, bcc:, subject:, body:).message
+        end
       end
     end
   end

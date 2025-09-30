@@ -4,4 +4,8 @@ class <%= class_name %>Email < ApplicationEmail
   def body = <<~PLAIN
 
   PLAIN
+
+  def html_body = <<~HTML
+
+  HTML
 end
