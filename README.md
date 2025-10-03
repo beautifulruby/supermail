@@ -5,16 +5,16 @@ Organize emails with plain 'ol Ruby objects in a Rails application, like this:
 ```ruby
 # ./app/email/user/welcome.rb
 class User::WelcomeEmail < ApplicationEmail
-  def initialize(person:)
-    @person = person
+  def initialize(user:)
+    @user = user
   end
 
-  def to = @person.email
+  def to = @user.email
   def subject = "Welcome to Beautiful Ruby"
   def body
     super do
       <<~_
-      Hi #{@person.name},
+      Hi #{@user.name},
 
       You're going to learn a ton at https://beautifulruby.com.
       _
@@ -88,16 +88,16 @@ You can customize the email by overriding the `to`, `from`, `subject`, and `body
 ```ruby
 # ./app/email/user/welcome.rb
 class User::WelcomeEmail < ApplicationEmail
-  def initialize(person:)
-    @person = person
+  def initialize(user:)
+    @user = user
   end
 
-  def to = @person.email
+  def to = @user.email
   def subject = "Welcome to the website"
   def body
     super do
       <<~_
-      Hi #{@person.name},
+      Hi #{@user.name},
 
       Welcome to the website We're excited to have you on board.
       _
