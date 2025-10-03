@@ -9,17 +9,22 @@ module Supermail
     desc "Generate a new email class"
 
     def create_email_file
-      template 'email.rb', "app/emails/#{file_path}_email.rb"
+      template 'email.rb', "app/emails/#{file_path}.rb"
     end
 
     private
 
     def file_path
-      name.underscore
+      "#{base_name.underscore}_email"
     end
 
     def class_name
-      name.camelize
+      "#{base_name.camelize}Email"
+    end
+
+    def base_name
+      stripped = name.to_s.sub(/_?email\z/i, '')
+      stripped.empty? ? name : stripped
     end
   end
 end

@@ -31,4 +31,14 @@ RSpec.describe Supermail::EmailGenerator, type: :generator do
       it { is_expected.to match(/def body = <<~PLAIN/) }
     end
   end
+
+  describe "with email suffix provided" do
+    before { run_generator ["WelcomeEmail"] }
+
+    describe "app/emails/welcome_email.rb" do
+      subject { File.read(EMAIL_DESTINATION_PATH.join("app/emails/welcome_email.rb")) }
+      it { is_expected.to match(/class WelcomeEmail < ApplicationEmail/) }
+      it { is_expected.not_to match(/WelcomeEmailEmail/) }
+    end
+  end
 end
