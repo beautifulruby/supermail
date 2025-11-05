@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    supermail (0.2.1)
+    supermail (0.2.2)
       actionmailer (>= 7.0)
 
 GEM
