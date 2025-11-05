@@ -58,4 +58,36 @@ RSpec.describe ExampleMailer do
       expect(result).to include("bcc=%5B%22bcc%40example.com%22%5D")
     end
   end
+
+  describe "delivery" do
+    before do
+      ActionMailer::Base.delivery_method = :test
+      ActionMailer::Base.deliveries.clear
+      ActiveJob::Base.queue_adapter = :test
+    end
+
+    describe "#deliver_now" do
+      it "delivers the email through ActionMailer" do
+        expect {
+          email.deliver_now
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+    end
+
+    describe "#deliver" do
+      it "delivers the email through ActionMailer" do
+        expect {
+          email.deliver
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+    end
+
+    describe "#deliver_later" do
+      it "enqueues the email for delivery through ActiveJob" do
+        expect {
+          email.deliver_later
+        }.to change { ActiveJob::Base.queue_adapter.enqueued_jobs.size }.by(1)
+      end
+    end
+  end
 end

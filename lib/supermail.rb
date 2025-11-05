@@ -8,13 +8,25 @@ module Supermail
   class Error < StandardError; end
 
   module Rails
+    # This is a bizzare work around for a commit that broke https://github.com/rails/rails/commit/c594ba4ffdb016c7b2a22055f41dfb2c4409594d
+    # further proving the bewildering maze of indirection in Rails ActionMailer.
+    class Mailer < ActionMailer::Base
+      def mail(...)
+        super(...)
+      end
+
+      def self.message_delivery(**)
+        ActionMailer::MessageDelivery.new self, :mail, **
+      end
+    end
+
     class Base
       delegate \
           :deliver,
           :deliver_now,
           :deliver_later,
           :message,
-        to: :action_mailer_message_delivery
+        to: :message_delivery
 
       def to = nil
       def from = nil
@@ -27,10 +39,8 @@ module Supermail
       def mailto = MailTo.href(to:, from:, cc:, bcc:, subject:, body:)
       alias :mail_to :mailto
 
-      # This is a bizzare work around for a commit that broke https://github.com/rails/rails/commit/c594ba4ffdb016c7b2a22055f41dfb2c4409594d
-      # further proving the bewildering maze of indirection in Rails ActionMailer.
-      private def action_mailer_message_delivery
-        ActionMailer::MessageDelivery.new(ActionMailer::Base, :mail,
+      private def message_delivery
+        Rails::Mailer.message_delivery(
           to:,
           from:,
           cc:,
