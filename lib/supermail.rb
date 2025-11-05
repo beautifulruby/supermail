@@ -14,7 +14,7 @@ module Supermail
           :deliver_now,
           :deliver_later,
           :message,
-        to: :action_mailer_base_mail
+        to: :action_mailer_message_delivery
 
       def to = nil
       def from = nil
@@ -27,8 +27,17 @@ module Supermail
       def mailto = MailTo.href(to:, from:, cc:, bcc:, subject:, body:)
       alias :mail_to :mailto
 
-      private def action_mailer_base_mail
-        ActionMailer::Base.mail(to:, from:, cc:, bcc:, subject:, body:)
+      # This is a bizzare work around for a commit that broke https://github.com/rails/rails/commit/c594ba4ffdb016c7b2a22055f41dfb2c4409594d
+      # further proving the bewildering maze of indirection in Rails ActionMailer.
+      private def action_mailer_message_delivery
+        ActionMailer::MessageDelivery.new(ActionMailer::Base, :mail,
+          to:,
+          from:,
+          cc:,
+          bcc:,
+          subject:,
+          body:
+        )
       end
     end
   end
